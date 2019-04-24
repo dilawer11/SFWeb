@@ -1,6 +1,8 @@
 # SFWeb
 #Surgical Fibre Online Order Management System
-#Note: This was moved from dilawer11/Projects/SF_OnlineOrderManagementSystem 
+#Note: This was moved from dilawer11/Projects/SF_OnlineOrderManagementSystem
+
+#This Directory doesn't contain the firebase API Keys for that contact me on slack or email
 
 ## Project setup
 ```
