@@ -1,4 +1,6 @@
-# sfweb
+# SFWeb
+#Surgical Fibre Online Order Management System
+#Note: This was moved from dilawer11/Projects/SF_OnlineOrderManagementSystem 
 
 ## Project setup
 ```
