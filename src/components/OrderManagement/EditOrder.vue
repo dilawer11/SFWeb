@@ -1,9 +1,9 @@
-<template>
+<template lang=html>
     <div class="edit-order">
         <div v-if="loading" class="progress">
             <div class="indeterminate"></div> 
         </div>
-       
+       <div v-if="contentLoaded">
         <h2 class="center-align black-text">Edit Order</h2>
         <div class="container" v-if="order && products.length">
             <div class="row edit-head" style="padding:20px">
@@ -45,10 +45,13 @@
                                     <input type="text" @change="updateItemTotal(itemIndex)" v-model="item.quantity">
                                 </td>
                                 <td>
-                                    <select v-model="item.size" @change="updateItemSize(itemIndex)" class="browser-default">
+                                    <select v-if="products[findProductbyName(item.name)]" v-model="item.size" @change="updateItemSize(itemIndex)" class="browser-default">
                                         <option selected>{{item.size}}</option>
                                         <option v-for="(element,i) in products[findProductbyName(item.name)].sizes.filter(sizeObj=>sizeObj.size!=item.size)" :key="i">{{element.size}}</option>
                                     </select>
+                                    <span v-else>
+                                        {{item.size}}
+                                    </span>
                                 </td>
                                 <td>{{item.price}}</td>
                                 <td>{{item.total}}</td>
@@ -78,11 +81,13 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 
 <script>
 import db from '@/firebase/init'
 import { mapState } from 'vuex'
+import validate from '@/js_files/validation.js'
 export default {
     name: 'EditOrder',
     data(){
@@ -94,6 +99,7 @@ export default {
             products: [],
             orderLoaded: false,
             productsLoaded:false,
+            contentLoaded:false,
         }
     },
     methods:{
@@ -114,7 +120,6 @@ export default {
                     passed=false;
                 } else if(isNaN(item.quantity) || item.quantity<=0 || item.quanity >= 99999){
                     this.feedback = 'Please enter quanity between 0 and 99999';
-                    console.log("failed")
                     passed=false;
                 } else if(!item.size){
                     this.feedback = 'Please Select and Item Size'
@@ -137,9 +142,7 @@ export default {
                         
                     }).catch(err=>{
                         alert('Something went wrong please try again later')
-                        console.log(err)
-                        this.loading=false;
-                        this.$router.push({name:'Dashboard'})       
+                        this.handleErr(err);       
                     })
                 }            
             }
@@ -178,22 +181,44 @@ export default {
         updateItemTotal(index){
             this.order.items[index].total=this.order.items[index].quantity*this.order.items[index].price
         },
+        handleErr(err){
+            if(err){
+                console.log(err);
+            }
+            this.$router.push({name: 'OrdersIndex'})
+        },
+        // checkLoading(){
+        //     if(this.orderLoaded && this.productsLoaded){
+        //         let newItems = this.order.items;
+        //         newItems = validate.cleanOrderItems(newItems,this.products);
+        //         if(newItems.length != this.order.items){
+        //             if(confirm('Some of the items were not found in the database. Are you sure you want to proceed and delete those items from the order?')){
+        //                 this.order.items=newItems;
+        //                 this.loading=false;
+        //                 this.productsMatched=true;
+        //             }else{
+        //                 this.handleErr(null);
+        //             }
+        //         }
+        //     } else{
+        //         this.loading=true;
+        //     }
+        // }
         checkLoading(){
             if(this.orderLoaded && this.productsLoaded){
-                this.loading=false;
-            } else{
-                this.loading=true;
+                this.contentLoaded = true;
+            } else {
+                this.loading = true;
             }
         }
-
-    },
+},
     created(){
         this.loading=true;
         let ref = db.collection('orders').where('no', '==', this.$route.params.order_no)
         ref.get().then(snapshot =>{
             if(snapshot.empty){
                 alert('Cannot find the order in the database')
-                this.$router.push({name: 'Dashboard'})
+                this.handleErr(null);
             } else{
                 snapshot.forEach(doc => {
                     this.order = doc.data()
@@ -204,10 +229,8 @@ export default {
             this.orderLoaded=true;
             this.checkLoading()
            }).catch(err=>{
-            this.feedback= 'Database returned an error'
-            console.log(err)
-            this.orderLoaded=true;
-            this.checkLoading();
+            alert('Database returned an error')
+            this.handleErr(err)
         })
         db.collection('products').get().then(snap=>{            
             snap.forEach(doc=>{
@@ -216,10 +239,8 @@ export default {
             this.productsLoaded=true;
             this.checkLoading()
         }).catch(err=>{
-            this.feedback = 'Database returned and error'
-            console.log(err)
-            this.productsLoaded = true;
-            this.checkLoading()
+            alert('Database returned and error');
+            this.handlerErr(err);
         })
     },
     computed:{

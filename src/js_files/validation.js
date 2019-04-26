@@ -66,6 +66,34 @@ export default {
         }
 
         //Sanity checks
+        
         //TODO: Add regular expression for email and phone checks too and name checks that it doesn't contain any numeric letter
+    },
+    cleanOrderItems(orderItems,products){
+        return orderItems.filter(item=> products.findIndex(product=> product.name==item.name))
+    },
+    queryValidate(name,email,phone,message){
+        //Presence checks
+        if(!name){
+            return 'Please enter a name'
+        } else if(!phone && !email){
+            return 'Please enter a phone number or an Email address'
+        } else if(!message){
+            return 'Please enter a message'
+        }
+
+        //Length Checks
+        if(name.length>100){
+            return 'Name length cannot exceed 100 characters'
+        } else if(phone.length>15){
+            return 'Phone number needs to have less than 15 characters' //TODO: Update this
+        } else if(email.length>100){
+            return 'Email length cannot exceed 100 characters'
+        } else if(message.length > 500 || message.length < 10){
+            return 'Message should be between 10-500 characters'
+        }
+
+        //Sanity Checks
+        //TODO: Copy sanity checks from the function right above and add for message if any
     }
 }
