@@ -1,4 +1,4 @@
-<template>
+<template lang=html>
   <div id="index">
     <div class="preloader">
       <div class="loader startLoad"></div>

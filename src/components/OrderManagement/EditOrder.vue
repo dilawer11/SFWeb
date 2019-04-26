@@ -92,6 +92,8 @@ export default {
             selectedStatus: null,
             order:null,
             products: [],
+            orderLoaded: false,
+            productsLoaded:false,
         }
     },
     methods:{
@@ -100,13 +102,6 @@ export default {
             if(this.selectedStatus!=this.order.status){
                 this.loading=true;
                 this.order.status=this.selectedStatus;
-                // db.collection('orders').doc(this.order.id).update(this.order).then(()=>{
-                //     this.loading=false;            
-                // }).catch(err=>{
-                //     alert('Something went wrong please try again later')
-                //     console.log(err)
-                //     this.loading=false;
-                // })
             }
         },
         validateOrder(){
@@ -182,6 +177,13 @@ export default {
         },
         updateItemTotal(index){
             this.order.items[index].total=this.order.items[index].quantity*this.order.items[index].price
+        },
+        checkLoading(){
+            if(this.orderLoaded && this.productsLoaded){
+                this.loading=false;
+            } else{
+                this.loading=true;
+            }
         }
 
     },
@@ -199,16 +201,25 @@ export default {
                     this.selectedStatus=this.order.status
                 })
             }
-            this.loading=false;
+            this.orderLoaded=true;
+            this.checkLoading()
            }).catch(err=>{
             this.feedback= 'Database returned an error'
             console.log(err)
-            this.loading=false;
+            this.orderLoaded=true;
+            this.checkLoading();
         })
-        db.collection('products').get().then(snap=>{
+        db.collection('products').get().then(snap=>{            
             snap.forEach(doc=>{
                 this.products.push(doc.data())
-            })
+            })  
+            this.productsLoaded=true;
+            this.checkLoading()
+        }).catch(err=>{
+            this.feedback = 'Database returned and error'
+            console.log(err)
+            this.productsLoaded = true;
+            this.checkLoading()
         })
     },
     computed:{

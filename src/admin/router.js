@@ -17,11 +17,11 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: '/admin',
   routes: [
  
     {
-      path: '/admin/',
+      path: '/',
       name: 'Dashboard',
       component: Dashboard,
       meta:{
@@ -29,7 +29,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/login',
+      path: '/login',
       name: 'Login',
       component: Login,
       meta:{
@@ -37,7 +37,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/products',
+      path: '/products',
       name: 'ProductsIndex',
       component: ProductsIndex,
       meta:{
@@ -45,7 +45,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/products/add-product',
+      path: '/products/add-product',
       name: 'AddProduct',
       component: AddProduct,
       meta:{
@@ -53,7 +53,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/products/edit-product/:product_slug',
+      path: '/products/edit-product/:product_slug',
       name: 'EditProduct',
       component: EditProduct,
       meta:{
@@ -61,7 +61,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/orders',
+      path: '/orders',
       name: 'OrdersIndex',
       component : OrdersIndex,
       meta:{
@@ -69,7 +69,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/orders/archived',
+      path: '/orders/archived',
       name: 'ArchivedOrders',
       component : ArchivedOrders,
       meta:{
@@ -77,7 +77,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/orders/view-order/:order_no',
+      path: '/orders/view-order/:order_no',
       name: 'ViewOrder',
       component : ViewOrder,
       meta:{
@@ -93,7 +93,7 @@ const router = new Router({
       }
     },
     {
-      path: '/admin/*',
+      path: '/*',
       name: 'NotFound',
       component: NotFound
     }
