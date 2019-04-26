@@ -69,9 +69,6 @@ export default {
         
         //TODO: Add regular expression for email and phone checks too and name checks that it doesn't contain any numeric letter
     },
-    cleanOrderItems(orderItems,products){
-        return orderItems.filter(item=> products.findIndex(product=> product.name==item.name))
-    },
     queryValidate(name,email,phone,message){
         //Presence checks
         if(!name){

@@ -110,30 +110,10 @@ export default {
                 this.order.status=this.selectedStatus;
             }
         },
-        validateOrder(){
-            //TODO: Validate Other Feilds
-            let passed=true;
-            //Order Items Validation
-            this.order.items.forEach(item=>{
-                if(!item.name){
-                    this.feedback = 'Please Select an Item Name'
-                    passed=false;
-                } else if(isNaN(item.quantity) || item.quantity<=0 || item.quanity >= 99999){
-                    this.feedback = 'Please enter quanity between 0 and 99999';
-                    passed=false;
-                } else if(!item.size){
-                    this.feedback = 'Please Select and Item Size'
-                    passed=false
-                }
-            })
-            if(passed){
-                this.feedback=null
-            }
-            return passed;
-        },
         updateOrder(){
-            this.loading=true;
-            if(this.validateOrder()){
+            this.feedback = validate.orderValidate(this.order.name,this.order.phone,this.order.email,this.order.items.length)
+            if(!this.feedback){
+                this.loading = true;
                 if(confirm('Are you sure you want to edit the order?')){
                     db.collection('orders').doc(this.order.id).update(this.order).then(()=>{
                         alert('Order Updated Successfully')
@@ -145,9 +125,7 @@ export default {
                         this.handleErr(err);       
                     })
                 }            
-            }
-            this.loading=false;
-            
+            }            
         },
         goToView(){
             if(confirm('Are you sure you want to leave this page? Any unsaved changes will be lost')){
@@ -187,26 +165,10 @@ export default {
             }
             this.$router.push({name: 'OrdersIndex'})
         },
-        // checkLoading(){
-        //     if(this.orderLoaded && this.productsLoaded){
-        //         let newItems = this.order.items;
-        //         newItems = validate.cleanOrderItems(newItems,this.products);
-        //         if(newItems.length != this.order.items){
-        //             if(confirm('Some of the items were not found in the database. Are you sure you want to proceed and delete those items from the order?')){
-        //                 this.order.items=newItems;
-        //                 this.loading=false;
-        //                 this.productsMatched=true;
-        //             }else{
-        //                 this.handleErr(null);
-        //             }
-        //         }
-        //     } else{
-        //         this.loading=true;
-        //     }
-        // }
         checkLoading(){
             if(this.orderLoaded && this.productsLoaded){
                 this.contentLoaded = true;
+                this.loading = false;
             } else {
                 this.loading = true;
             }
