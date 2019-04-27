@@ -57,6 +57,15 @@
                                 <td>{{item.total}}</td>
                                 <td><i @click="deleteItem(itemIndex)" class="material-icons">delete</i></td>
                             </tr>
+                            <tr>
+                                <td></td>
+                                <td class="right-align add-new-button"><button class="btn-large red"> <i @click="addNewProduct()" class="material-icons">add</i></button></td>                                
+
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>                                
+                            </tr>
                         </tbody>
                     </table>
                     <br>
@@ -103,7 +112,21 @@ export default {
         }
     },
     methods:{
-   
+        addNewProduct(){
+            if(this.order.items[this.order.items.length-1].name != ''){
+                let item = {}
+                item.name = ''
+                item.quantity = 0
+                item.size = ''
+                item.price = 0
+                item.total = 0
+                this.order.items.push(item);
+                this.feedback = null;
+            } else {
+                this.feedback = 'Please add the details in the last product before adding new ones'
+            }
+            
+        },
         changeStatus(){
             if(this.selectedStatus!=this.order.status){
                 this.loading=true;
@@ -219,5 +242,8 @@ export default {
 .edit-order .indent{
     padding-left:1.8em;
     padding-right:1.8em;
+}
+.edit-order .add-new-button{
+    padding-right:2.2em;
 }
 </style>
