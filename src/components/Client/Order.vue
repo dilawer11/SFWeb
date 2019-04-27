@@ -93,7 +93,7 @@
                                     <label v-if="Total" style="font-size: 16px;" id="price">Total: {{Total}}</label>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input type="submit" class="btn btn-primary " value="Add to Cart"></input>
+                                    <input type="submit" class="btn btn-primary " value="Add to Cart">
                                 </div>
                                 
                                 

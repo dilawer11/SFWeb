@@ -64,7 +64,11 @@ export default {
         }
 
         //Sanity checks
-        
+        if(!emailRegEx(email)){
+            return 'Please enter valid email'
+        } else if(!phoneRegEx(phone)){
+            return 'Please enter a valid phone number'
+        }
         //TODO: Add regular expression for email and phone checks too and name checks that it doesn't contain any numeric letter
     },
     queryValidate(name,email,phone,message){
@@ -80,8 +84,8 @@ export default {
         //Length Checks
         if(name.length>100){
             return 'Name length cannot exceed 100 characters'
-        } else if(phone.length>15){
-            return 'Phone number needs to have less than 15 characters' //TODO: Update this
+        } else if(phone.length>20){
+            return 'Phone number needs to have less than 20 characters' //TODO: Update this
         } else if(email.length>100){
             return 'Email length cannot exceed 100 characters'
         } else if(message.length > 500 || message.length < 10){
@@ -89,6 +93,19 @@ export default {
         }
 
         //Sanity Checks
-        //TODO: Copy sanity checks from the function right above and add for message if any
-    }
+        if(!emailRegEx(email)){
+            return 'Please enter valid email'
+        } else if(!phoneRegEx(phone)){
+            return 'Please enter a valid phone number'
+        }
+        return null;
+    },
+    emailRegEx(email){
+        let regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/
+        return regex.test(email)
+    },
+    phoneRegEx(phone){
+        let regex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
+        return regex.test(phone) 
+    },
 }

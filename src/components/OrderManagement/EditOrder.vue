@@ -55,7 +55,7 @@
                                 </td>
                                 <td>{{item.price}}</td>
                                 <td>{{item.total}}</td>
-                                <td><i @click="deleteItem(itemIndex)" class="material-icons">delete</i></td>
+                                <td class="delete-item"><i @click="deleteItem(itemIndex)" class="material-icons">delete</i></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -156,7 +156,9 @@ export default {
             }
         },
         deleteItem(index){
-            this.order.items.splice(index,1)
+            if(confirm('Are you sure you want to delete this item')){
+                this.order.items.splice(index,1)
+            }
         },
         findProductbyName(name){
             return this.products.findIndex((product)=>product.name==name);
@@ -245,5 +247,9 @@ export default {
 }
 .edit-order .add-new-button{
     padding-right:2.2em;
+}
+.edit-order .delete-item{
+    cursor: pointer;
+
 }
 </style>

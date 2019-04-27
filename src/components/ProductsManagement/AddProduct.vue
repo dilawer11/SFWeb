@@ -63,6 +63,8 @@
 import db from "@/firebase/init";
 import slugify from "slugify";
 import validate from '@/js_files/validation.js'
+import parser from '@/js_files/parsing.js'
+
 export default {
   name: "AddProduct",
   data() {
@@ -88,11 +90,13 @@ export default {
           remove: /[$*_+%~()'",!\-:@]/g,
           lower: true
         });
+      
+        let product = parser.productTrimmer(this.name,this.category,this.sizes)
         db.collection("products")
           .add({
-            name: this.name,
-            category: this.category,
-            sizes: this.sizes,
+            name: product.name,
+            category: product.category,
+            sizes: product.sizes,
             image: "none",
             description: this.description,
             slug: this.slug
