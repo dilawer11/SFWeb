@@ -24,9 +24,7 @@ export default {
         //Normality checks (regular expressions)
         return null
     },
-    sizeValidate(size,price){
-        console.log('sizeValidate called')
-      
+    sizeValidate(size,price){      
         //Presense checks 
         if(!size){
             return 'Please enter a size'

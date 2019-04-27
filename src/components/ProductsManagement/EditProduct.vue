@@ -110,11 +110,11 @@ export default {
           .then(() => {
             this.loading = false;
             alert("Product Updated Sucessfully");
-            this.$router.push({ name: "ProductIndex" });
+            this.$router.push({ name: "ProductsIndex" });
           })
           .catch(err => {
             alert("Something went wrong please try again later");
-            this.$router.push({ name: "ProductIndex" });
+            this.$router.push({ name: "ProductsIndex" });
             this.loading = false;
           });
       }

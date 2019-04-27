@@ -100,12 +100,12 @@ export default {
           .then(() => {
             this.loading = false;
             alert("Product Added Sucessfully");
-            this.$router.push({ name: "ProductIndex" });
+            this.$router.push({ name: "ProductsIndex" });
           })
           .catch(err => {
             this.loading = false;
             alert("Something went wrong please try again later");
-            this.$router.push({ name: "ProductIndex" });
+            this.$router.push({ name: "ProductsIndex" });
           });
       }
     },
