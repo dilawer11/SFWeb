@@ -64,8 +64,8 @@
 
                                     <label class="control-label col-md-2" for="quantity" style=" font-size: 16px;">Quantity</label>
                                         <div class="col-md-4">
-                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-if="!(this.currentProduct===null)" placeholder=" " v-model=selected.quantity  @keypress="isNumber"></input> 
-                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-else disabled placeholder="Chose an item first" v-model=selected.quantity @keypress="isNumber" @keyup="isNumber"></input> 
+                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-if="!(this.currentProduct===null)" placeholder=" " v-model=selected.quantity  @keypress="isNumber">
+                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-else disabled placeholder="Chose an item first" v-model=selected.quantity @keypress="isNumber" @keyup="isNumber"> 
                                         </div>
                                 </div>
                             </div>
