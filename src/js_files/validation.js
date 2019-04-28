@@ -44,7 +44,7 @@ export default {
         }
         return null
     },
-    orderValidate(name,phone,email,orderItemsLength){
+    orderValidate(name,phone,email,orderItemsLength,orderItems){
         //Presence Checks
         if(!name){
             return 'Please enter a name'
@@ -64,12 +64,11 @@ export default {
         }
 
         //Sanity checks
-        if(!emailRegEx(email)){
+        if(!this.emailRegEx(email)){
             return 'Please enter valid email'
-        } else if(!phoneRegEx(phone)){
+        } else if(!this.phoneRegEx(phone)){
             return 'Please enter a valid phone number'
         }
-        //TODO: Add regular expression for email and phone checks too and name checks that it doesn't contain any numeric letter
     },
     queryValidate(name,email,phone,message){
         //Presence checks
@@ -93,9 +92,9 @@ export default {
         }
 
         //Sanity Checks
-        if(!emailRegEx(email)){
+        if(!this.emailRegEx(email)){
             return 'Please enter valid email'
-        } else if(!phoneRegEx(phone)){
+        } else if(!this.phoneRegEx(phone)){
             return 'Please enter a valid phone number'
         }
         return null;

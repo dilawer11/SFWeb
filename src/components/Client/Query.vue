@@ -10,13 +10,13 @@
     
         <div class="container">
             <div class="formBox">
-                <form>
+                <form @submit.prevent="sendQuery">
                     <div class="row">
                         <div class="col-sm-12">
                             <h1>Query Form</h1>
                         </div>
                     </div>
-
+                    <p v-if="feedback" class="red-text center-align">{{feedback}}</p>
                     <div class="row">
                         <div class="col-sm-6">
                             
@@ -63,65 +63,19 @@
                     <div class="row">
 
                         <div class="col-sm-12">
-                            <input type="submit" name="Send" class="button btn-default btn-lg " @click="sendQuery">
+                            <input type="submit" name="Send" class="button btn-default btn-lg">
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </section>
-                     
-
-
-
-    <!-- <div class="divider"></div>
-    <br><br>
-    <br><br>
-    <form class="col s12">
-        <div class="row">
-            <div class="input-field col s12 m6">
-                <i class="material-icons prefix">account_circle</i>
-                <input v-model="firstname" id="first_name" type="text">
-                <label class="active grey-text" for="first_name">First Name</label>
-            </div>
-            <div class="input-field col s12 m6">
-                <i class="material-icons prefix">account_circle</i>
-                <input v-model="lastname" id="last_name" type="text" >
-                <label class="active grey-text" for="last_name">Last Name</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s12 m6">
-                <i class="material-icons prefix">email</i>
-                <input v-model="email" id="email" type="email">
-                <label class="active grey-text" for="email">Email </label>
-            </div>
-            <div class="input-field col s12 m6">
-                <i class="material-icons prefix">phone</i>
-                <input v-model="phone" id="phone" type="tel" placeholder="+12-123-1234567">
-                <label class="active grey-text" for="phone">Phone</label>
-            </div>
-        </div>
-  
-        <div class="row">
-            <div class="input-field col s12 m12">
-            <i class="material-icons prefix">mode_edit</i>
-            <textarea  v-model="message" id="message" class="materialize-textarea grey-text" data-length=250></textarea>
-            <label class="active grey-text" for="message">Message</label>
-            </div>
-        </div>
-        <button @click="sendQuery" class="btn waves-effect waves-light grey">
-            Send
-            <i class="material-icons right">send</i>
-        </button> 
-    </form> -->
-
-                <!--End Portfolio Section-->
     </div>
 </template>
 
 <script>
-
+import validate from '@/js_files/validation.js'
+import firebase from 'firebase'
 export default {
     name: 'Query',
     data(){
@@ -130,16 +84,25 @@ export default {
             lastname: null,
             email: null,
             phone: null,
-            message: null
+            message: null,
+            feedback : null,
         }
     },
     methods:{
         sendQuery(){
-            alert('Your Query Has Been Sent')
-            this.$router.push({name:'Query'})
-            console.log(this.firstname,this.lastname)
-            console.log(this.email,this.phone)
-            console.log(this.message)
+            this.feedback = validate.queryValidate(this.firstname+' '+this.lastname,this.email,this.phone,this.message)
+            if(!this.feedback){
+                let emailBody = 'Name : ' + this.firstname + ' ' + this.lastname + '\n\n' + 'Email: ' + this.email + '   Phone: ' + this.phone + '\n\n' + this.message
+                var sendMail = firebase.functions().httpsCallable('sendMail');
+                sendMail({body: emailBody, to: 'dilawer11@gmail.com', from: 'Surgical Fibre <noreply-surgicalfibre@surgicalfibre.com>'}).then(result=>{
+                    alert('Your Query Has Been Recieved')
+                    this.$router.push({name:'Query'})
+                }).catch(err=>{
+                    alert('Error: Your Query Was Not Sent')
+                    console.log(err)
+                    this.$router.push({name:'Query'})
+                })
+            }
         }
     }
 }

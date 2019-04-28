@@ -2,7 +2,7 @@
      <div class="navbar ">
         <nav v-if="user" class="nav-extended red darken-2">
             <div class="container">
-                <router-link :to="{name:'Index'}">Surgical Fibre Admin Portal</router-link>
+                <router-link :to="{name:'Dashboard'}">Surgical Fibre Admin Portal</router-link>
                 <ul class="right">
                     <li v-if="!user"><router-link :to="{name:'Login'}">Login</router-link></li>
                     <li v-if="user"><router-link :to="{name:'Dashboard'}">Dashboard</router-link></li>
