@@ -24,6 +24,14 @@ export default {
         //Normality checks (regular expressions)
         return null
     },
+    orderItemValidate(orderItems){
+        orderItems.forEach(item => {
+            if(isNaN(item.quanitity) && item.quanity<=0){
+                return 'Quantity must be a number and greater than zero'
+            } 
+        })
+        return null;
+    },
     sizeValidate(size,price){      
         //Presense checks 
         if(!size){
@@ -69,6 +77,7 @@ export default {
         } else if(!this.phoneRegEx(phone)){
             return 'Please enter a valid phone number'
         }
+        return this.orderItemValidate(orderItems)
     },
     queryValidate(name,email,phone,message){
         //Presence checks

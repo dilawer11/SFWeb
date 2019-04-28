@@ -40,7 +40,7 @@
                         <div class="col-sm-6">
                             <h3>Phone: </h3>
                             <div class="inputBox ">
-                                <input v-model=Phone type="text" class="input" @keydown="isPhoneNumber">
+                                <input v-model=Phone type="text" class="input">
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
 
 
                     <div class="row">
-                        <form class="add-item padding-bottom-2 padding-right-2  padding-left-2 padding-top-2 bg-info" @submit.prevent="AddProduct">
+                        <form class="add-item padding-bottom-2 padding-right-2  padding-left-2 padding-top-2" @submit.prevent="AddProduct">
 
                             <h3>Add product:</h3>
                             
@@ -64,8 +64,7 @@
 
                                     <label class="control-label col-md-2" for="quantity" style=" font-size: 16px;">Quantity</label>
                                         <div class="col-md-4">
-                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-if="!(this.currentProduct===null)" placeholder=" " v-model=selected.quantity  @keypress="isNumber">
-                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-else disabled placeholder="Chose an item first" v-model=selected.quantity @keypress="isNumber" @keyup="isNumber"> 
+                                            <input type="text" id="quantity" class="form-control" style="width: 100%" v-model="selected.quantity"> 
                                         </div>
                                 </div>
                             </div>
@@ -87,11 +86,7 @@
                             </div>
               
                             <div class="row right-text">
-                                <div class="col-sm-10">
-
-                                    <label v-if="!Total" style="font-size: 16px;" id="price">Total: 0</label>
-                                    <label v-if="Total" style="font-size: 16px;" id="price">Total: {{Total}}</label>
-                                </div>
+                             
                                 <div class="col-sm-2">
                                     <input type="submit" class="btn btn-primary " value="Add to Cart">
                                 </div>
@@ -150,8 +145,8 @@
 
                     <div class="row padding-top-90">
                         <div class="btn-toolbar pull-right">
-                            <button type="button" id="placeOrder" class="btn btn-primary btn-lg" @click="PlaceOrder">Place Order</button>
-                            <button type="button" id="getQuote" class="btn btn-primary btn-lg">Get Price Quote</button>
+                            <button type="button" id="placeOrder" class="btn btn-primary btn-lg" @click="placeOrder">Place Order</button>
+                            <button type="button" id="getQuote" class="btn btn-primary btn-lg" @click="getPriceQuote" >Get Price Quote</button>
                         </div>
                     </div>
                 </form>
@@ -171,10 +166,11 @@
 </template>
 
 <script>
-
+import firebase from 'firebase'
 import db from '@/firebase/init'
 import { constants } from 'crypto';
 import { COPYFILE_EXCL } from 'constants';
+import validate from '@/js_files/validation.js'
 
 export default {
     name: 'Order',
@@ -212,59 +208,8 @@ export default {
 
         }
     },
-    methods:{
-
-            isPhoneNumber(event)
-            {
-                var phoneno = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
-                if(inputtxt.value.match(phoneno))
-                {
-                    return true;      
-                }
-                else
-                {
-                    this.feedback="Not a valid Phone Number";
-                    return false;
-                }
-            },
-            isPhoneNumber(event){
-            if (!(event.key === "Backspace" || event.key === "Delete" || event.key==="+"))
-            {
-                if (!(event.key === 'Enter' || (Number(event.key) >= 0 && Number(event.key) <= 9)))
-                {
-                    this.feedback="Phone Number can only contain numbers";
-                    event.preventDefault();
-                }
-                else if(this.Phone.length>=13)
-                {
-                    this.feedback="Phone Number can only contain 13 numbers";
-                    event.preventDefault();
-
-                }
-                else
-                {
-                    this.feedback=null
-                }
-            }
-            else
-            {
-                 this.feedback=null
-            }
-           
-        },
-        isNumber(event){
-            if (!(event.key === 'Enter' || (Number(event.key) >= 0 && Number(event.key) <= 9)))
-            {
-                this.feedback="Quantity must be a number";
-                event.preventDefault();
-            }
-            else
-            {
-                this.feedback=null
-            }
-
-        },
-           
+    methods:{    
+       
         AddProduct(e){
             if(isNaN(this.selected.quantity))
             {
@@ -276,8 +221,6 @@ export default {
                 var temp = this.selected.quantity * this.selected.sizes.price
                 
                 this.selected.total=temp
-                console.log("hereee")
-                console.log(this.selected.total)
                 var temp=Object.assign({},this.selected)
                 this.Cart.push(temp)
             
@@ -293,79 +236,43 @@ export default {
 
          
         },
-        PlaceOrder(e){
-            var temp="";
-            if(!this.LastName||!this.FirstName || !this.Phone || !this.Email)
-            {
-                temp+="Missing details in the form \n"
-            }
-
-            
-            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (this.Email && !(re.test(String(this.Email).toLowerCase()) && this.Email.length>4))
-            {
-                temp+="Enter a Valid Email \n"
-                
-            }
-          
-            if(this.Cart.length===0){
-                temp+=" Add products to Cart before placing order\n"
-            }
-
-            if(temp!=="")
-            {
-                this.feedback=temp;
-            }
-            else{
-                this.feedback=null
-                var Fullname=this.FirstName+' '+ this.LastName
-                
-                // var orderTotal=0;
-                // let i=0
-                // for(i=0; i<this.Cart.length;  i=i+1)
-                // {
-                //     t+=this.Cart[i].total
-
-                // }
-                
-                console.log(Fullname)                
-                console.log(this.Email)
-                console.log(this.Phone)
-                console.log(this.Cart)
-
-                db.collection('products').add({
+        placeOrder(){
+            this.feedback = validate.orderValidate(this.FirstName+this.LastName,this.Phone, this.Email, this.Cart.length, this.Cart)
+            if(!this.feedback){
+                db.collection('orders').add({
                     email:this.Email,
                     items:this.Cart,
-                    name:this.Fullname,
-                    no:0,
+                    name:this.FirstName+ ' '+ this.LastName,
+                    no:20,
                     phone:this.Phone,
-                    status:"SENT",
-                    total:0
-                 
-
+                    status:"NEW",
                 }).then(()=>{
                     this.loading=false;
-                    alert('Order Sucessfully Place')
-                    this.$router.push({name:'Dashboard'})
+                    alert('Order Sucessfully Placed')
+                    this.$router.push({name:'Order'})
                 }).catch(err=>{
                     this.loading=false;
                     alert('Something went wrong please try again later')
-                    this.$router.push({name:'Dashboard'})
+                    this.$router.push({name:'Order'})
                 })
-                
-// email "dilawer11@gmail.com"
-// id "MkQfASi57iF2uq69HjjQ"
-// items [{name: "Cotton Wool", pri...]
-// name "Dilawer"
-// no 21
-// phone "+923234443331"
-// status "SENT"
-// total 190 
-
-
             }
-
-        }
+        },
+        getPriceQuote(){
+            let emailBody = 'Name : ' + this.Firstname + ' ' + this.Lastname + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
+            emailBody = emailBody + 'Requested the Quote For the following items\n\n'
+            this.Cart.forEach(item=>{
+                emailBody = emailBody+item.name+ ' | ' + item.sizes.size + ' | ' + item.quantity + '\n'
+            })
+            var sendMail = firebase.functions().httpsCallable('sendMail');
+            sendMail({body: emailBody, to: 'dilawer11@gmail.com', from: 'Surgical Fibre <noreply-surgicalfibre@surgicalfibre.com>'}).then(result=>{
+                alert('Your Request Has Been Recieved')
+                this.$router.push({name:'Order'})
+            }).catch(err=>{
+                alert('Error: Your Price Quote Was Not Sent')
+                console.log(err)
+                this.$router.push({name:'Order'})
+            })
+        },
 
     },
     computed: {
