@@ -106,7 +106,7 @@
           <!--testimonial 1-->
           <div class="testimonial">
             <div class="content">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus molestie, justo nec convallis sollicitudin, sapien lorem dictum lacus, non consequat odio ipsum nec est. Sed mattis egestas elementum. Nulla facilisi. Quisque placerat risus ac nunc ornare tincidunt.</p>
+              <p>The message from CEO will go here</p>
               <h6 class="name-job">
                 <span class="name">Arshad Kamal</span>
                 <span class="job">CEO</span>
