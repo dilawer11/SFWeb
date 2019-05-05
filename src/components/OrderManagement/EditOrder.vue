@@ -54,7 +54,7 @@
                                     </span>
                                 </td>
                                 <td>{{item.price}}</td>
-                                <td>{{item.total}}</td>
+                                <td>{{item.quantity*item.price}}</td>
                                 <td class="delete-item"><i @click="deleteItem(itemIndex)" class="material-icons">delete</i></td>
                             </tr>
                             <tr>
@@ -170,7 +170,6 @@ export default {
             // this.order.items[index].size = this.products[this.findProductbyName(this.order.items[index].name)].sizes[0].size;
             this.order.items[index].size = null;
             this.updateItemSize(index)
-            this.updateItemTotal(index);
         },
         updateItemSize(index){
             if(this.order.items[index].size){
@@ -179,11 +178,8 @@ export default {
             else{
                 this.order.items[index].price=0;
             }
-            this.updateItemTotal(index);
         },
-        updateItemTotal(index){
-            this.order.items[index].total=this.order.items[index].quantity*this.order.items[index].price
-        },
+    
         handleErr(err){
             if(err){
                 console.log(err);
@@ -233,7 +229,7 @@ export default {
     computed:{
         ...mapState(['statusOptions']),
         totalAmount: function (){
-            return this.order.items.reduce((num,item)=>item.total+num,0)
+            return this.order.items.reduce((num,item)=>(item.quantity*item.price)+num,0)
         },
     },
    

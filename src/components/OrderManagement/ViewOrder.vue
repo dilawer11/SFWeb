@@ -38,7 +38,7 @@
                                 <td>{{item.quantity}}</td>
                                 <td>{{item.size}}</td>
                                 <td>{{item.price}}</td>
-                                <td>{{item.total}}</td>
+                                <td>{{item.price*item.quantity}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,7 +127,7 @@ export default {
     computed:{
         ...mapState(['statusOptions']),
         totalAmount: function (){
-            return this.order.items.reduce((num,item)=>item.total+num,0)
+            return this.order.items.reduce((num,item)=>(item.quantity*item.price)+num,0)
         },
     }
 }

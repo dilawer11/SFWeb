@@ -243,7 +243,7 @@ export default {
                 this.Cart.forEach(item=>{
                     items.push({
                         name:item.name,
-                        quantity:Number(item.quantity),
+                        quantity: parseInt(item.quantity,10),
                         size:item.sizes.size,
                         price:item.sizes.price
                     })
