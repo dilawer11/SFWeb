@@ -99,8 +99,7 @@
                     </div>
 
 
-                    <label v-if="this.feedback" style="color:rgba(151, 26, 26, 0.5);">{{feedback}}</label>
-                    <label v-if="this.feedback===null"> </label>
+                    <p v-if="feedback" style="color:rgba(151, 26, 26, 0.5);">{{feedback}}</p>
 
                     <div class="table-responsive padding-top-2">
                         <table class="table" v-if="this.Cart.length!==0">
@@ -213,13 +212,17 @@ export default {
         AddProduct(e){
             if(isNaN(this.selected.quantity))
             {
-                this.feedback="QUANTITY MUST BE A NUMBER"
+                this.feedback="Quantity must be a number"
                 this.selected.quantity=null;
-            }
-            if(this.selected.name!==null && this.selected.quantity!==null && this.selected.sizes!=={} && this.selected.price!==0)
+                return;
+            } else if(this.selected.quantity>100000){
+                this.feedback="Quanity must be less than 100000"
+                this.selected.quantity = null;
+                return;
+            } else if(this.selected.name!==null && this.selected.quantity!==null && this.selected.sizes!=={} && this.selected.price!==0)
             {
+                this.feedback = null;
                 var temp = this.selected.quantity * this.selected.sizes.price
-                
                 this.selected.total=temp
                 var temp=Object.assign({},this.selected)
                 this.Cart.push(temp)
@@ -237,17 +240,17 @@ export default {
          
         },
         async placeOrder(){
-            this.feedback = validate.orderValidate(this.FirstName+this.LastName,this.Phone, this.Email, this.Cart.length, this.Cart)
-            if(!this.feedback){
-                var items = []
+            var items = []
                 this.Cart.forEach(item=>{
-                    items.push({
-                        name:item.name,
-                        quantity: parseInt(item.quantity,10),
-                        size:item.sizes.size,
-                        price:item.sizes.price
-                    })
+                items.push({
+                    name:item.name,
+                    quantity: parseInt(item.quantity,10),
+                    size:item.sizes.size,
+                    price:item.sizes.price
                 })
+            })
+            this.feedback = validate.orderValidate(this.FirstName+this.LastName,this.Phone, this.Email, items.length, items)
+            if(!this.feedback){
                 var snap = await db.collection('info').doc('orderNumber').get()
                 let orderNumber = snap.data().num;
                 db.collection('orders').add({
@@ -304,7 +307,7 @@ export default {
         },
         Total()
         {
-            return this.selected.quantity * this.selected.sizes.price
+            return toString(this.selected.quantity * this.selected.sizes.price)
         }
     },
     watch: {

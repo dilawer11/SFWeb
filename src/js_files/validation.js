@@ -25,12 +25,20 @@ export default {
         return null
     },
     orderItemValidate(orderItems){
-        // orderItems.forEach(item => {
-        //     if(isNaN(item.quanitity) && item.quanity<=0){
-        //         return 'Quantity must be a number and greater than zero'
-        //     } 
-        // })
-        return null;
+        let sum = 0
+        let retVal = null
+        orderItems.forEach(item => {
+            if(isNaN(item.quantity) && item.quantity<=0){
+                retVal =  'Quantity must be a number and greater than zero'
+            } else if (item.quantity > 100000){
+                retVal = 'Max Quantity allowed is 100000. If you want to order more please contact us directly'
+            }
+            sum = sum + (item.quanitity*item.price)
+        })
+        if(sum>10000000000){
+            return 'Max Amount Allowed is Rs. 10 Million. If you want to order more please contact us directly'
+        }
+        return retVal;
     },
     sizeValidate(size,price){      
         //Presense checks 
@@ -70,7 +78,9 @@ export default {
         } else if(email.length>100){
             return 'Email length cannot exceed 100 characters'
         }
-
+        if(this.orderItemsLength>15){
+            return 'You can order a maximum of 15 items'
+        }
         //Sanity checks
         if(!this.emailRegEx(email)){
             return 'Please enter valid email'
