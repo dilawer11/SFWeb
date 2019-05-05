@@ -236,17 +236,31 @@ export default {
 
          
         },
-        placeOrder(){
+        async placeOrder(){
             this.feedback = validate.orderValidate(this.FirstName+this.LastName,this.Phone, this.Email, this.Cart.length, this.Cart)
             if(!this.feedback){
+                var items = []
+                this.Cart.forEach(item=>{
+                    items.push({
+                        name:item.name,
+                        quantity:Number(item.quantity),
+                        size:item.sizes.size,
+                        price:item.sizes.price
+                    })
+                })
+                var snap = await db.collection('info').doc('orderNumber').get()
+                let orderNumber = snap.data().num;
                 db.collection('orders').add({
                     email:this.Email,
-                    items:this.Cart,
+                    items:items,
                     name:this.FirstName+ ' '+ this.LastName,
-                    no:20,
+                    no: orderNumber,
                     phone:this.Phone,
                     status:"NEW",
                 }).then(()=>{
+                    db.collection('info').doc('orderNumber').set({
+                        num : orderNumber+1,
+                    })
                     this.loading=false;
                     alert('Order Sucessfully Placed')
                     this.$router.push({name:'Order'})
@@ -258,7 +272,7 @@ export default {
             }
         },
         getPriceQuote(){
-            let emailBody = 'Name : ' + this.Firstname + ' ' + this.Lastname + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
+            let emailBody = 'Name : ' + this.FirstName + ' ' + this.LastName + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
             emailBody = emailBody + 'Requested the Quote For the following items\n\n'
             this.Cart.forEach(item=>{
                 emailBody = emailBody+item.name+ ' | ' + item.sizes.size + ' | ' + item.quantity + '\n'
