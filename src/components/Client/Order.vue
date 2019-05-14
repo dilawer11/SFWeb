@@ -40,7 +40,7 @@
                         <div class="col-sm-6">
                             <h3>Phone: </h3>
                             <div class="inputBox ">
-                                <input v-model=Phone type="text" class="input">
+                                <input placeholder="+00-0123456789" v-model=Phone type="text" class="input">
                             </div>
                         </div>
                     </div>
@@ -275,20 +275,24 @@ export default {
             }
         },
         getPriceQuote(){
-            let emailBody = 'Name : ' + this.FirstName + ' ' + this.LastName + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
-            emailBody = emailBody + 'Requested the Quote For the following items\n\n'
-            this.Cart.forEach(item=>{
-                emailBody = emailBody+item.name+ ' | ' + item.sizes.size + ' | ' + item.quantity + '\n'
-            })
-            var sendMail = firebase.functions().httpsCallable('sendMail');
-            sendMail({body: emailBody, to: 'dilawer11@gmail.com', from: 'Surgical Fibre <noreply-surgicalfibre@surgicalfibre.com>'}).then(result=>{
-                alert('Your Request Has Been Recieved')
-                this.$router.push({name:'Order'})
-            }).catch(err=>{
-                alert('Error: Your Price Quote Was Not Sent')
-                console.log(err)
-                this.$router.push({name:'Order'})
-            })
+            this.feedback = validate.orderValidate(this.FirstName+this,LastName,this.Phone,this.Email,items.length,items);
+            if(!this.feedback){
+                this.feedback = null;
+                let emailBody = 'Name : ' + this.FirstName + ' ' + this.LastName + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
+                emailBody = emailBody + 'Requested the Quote For the following items\n\n'
+                this.Cart.forEach(item=>{
+                    emailBody = emailBody+item.name+ ' | ' + item.sizes.size + ' | ' + item.quantity + '\n'
+                })
+                var sendMail = firebase.functions().httpsCallable('sendMail');
+                sendMail({body: emailBody, to: 'dilawer11@gmail.com', from: 'Surgical Fibre <noreply-surgicalfibre@surgicalfibre.com>'}).then(result=>{
+                    alert('Your Request Has Been Recieved')
+                    this.$router.push({name:'Order'})
+                }).catch(err=>{
+                    alert('Error: Your Price Quote Was Not Sent')
+                    console.log(err)
+                    this.$router.push({name:'Order'})
+                })
+            }
         },
 
     },
