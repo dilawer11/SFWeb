@@ -1,4 +1,30 @@
 export default {
+    emailValidate(email){
+        let regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/
+        if(!email){
+            return 'Please enter an email'
+        }
+        else if(email.length>100){
+            return 'Email length cannot exceed 100 characters'            
+        } else if(!regex.test(email)){
+            return 'Please enter a valid email'
+        }
+        return null;
+    },
+    phoneValidate(phone){
+        //let regex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
+        let regex = /^\+(?:[0-9] ?){6,14}[0-9]$/
+        if(!phone){
+            return 'Please enter a phone number'
+        } else if(phone.length>15){
+            return 'Phone number should be less than 15 characters'
+        } else if(phone.length<5){
+            return 'Phone number should be atleast 5 characters'
+        } else if(!regex.test(phone)){
+            return 'Please enter a valid phone number'
+        }
+        return null 
+    },
     productValidate(name,category, description,sizesLength){
         //Presence checks
         if(!name){
@@ -20,8 +46,6 @@ export default {
         } else if(sizesLength>50){
             return 'Maximum length of sizes can be 50'
         }
-        
-        //Normality checks (regular expressions)
         return null
     },
     orderItemValidate(orderItems){
@@ -64,8 +88,6 @@ export default {
         //Presence Checks
         if(!name){
             return 'Please enter a name'
-        } else if(!phone && !email){
-            return 'Please enter a phone number or an Email address'
         } else if(!orderItemsLength){
             return 'Please atleast add 1 item to the order'
         }
@@ -73,19 +95,18 @@ export default {
         //Length checks
         if(name.length>100){
             return 'Name length cannot exceed 100 characters'
-        } else if(phone.length>15){
-            return 'Phone number needs to have less than 15 characters' //TODO: Update this
-        } else if(email.length>100){
-            return 'Email length cannot exceed 100 characters'
-        }
-        if(this.orderItemsLength>15){
+        }  else if(this.orderItemsLength>15){
             return 'You can order a maximum of 15 items'
         }
         //Sanity checks
-        if(!this.emailRegEx(email)){
-            return 'Please enter valid email'
-        } else if(!this.phoneRegEx(phone)){
-            return 'Please enter a valid phone number'
+        let emailValidateResult = null;
+        let phoneValidateResult = null;
+        emailValidateResult = this.emailValidate(email);
+        phoneValidateResult = this.phoneValidate(phone);
+        if(emailValidateResult){
+            return emailValidateResult
+        } else if(phoneValidateResult){
+            return phoneValidateResult;
         }
         return this.orderItemValidate(orderItems)
     },
@@ -102,28 +123,21 @@ export default {
         //Length Checks
         if(name.length>100){
             return 'Name length cannot exceed 100 characters'
-        } else if(phone.length>20){
-            return 'Phone number needs to have less than 20 characters' //TODO: Update this
-        } else if(email.length>100){
-            return 'Email length cannot exceed 100 characters'
         } else if(message.length > 500 || message.length < 10){
             return 'Message should be between 10-500 characters'
         }
 
         //Sanity Checks
-        if(!this.emailRegEx(email)){
-            return 'Please enter valid email'
-        } else if(!this.phoneRegEx(phone)){
-            return 'Please enter a valid phone number'
+        let emailValidateResult = null;
+        let phoneValidateResult = null;
+        emailValidateResult = this.emailValidate(email);
+        phoneValidateResult = this.phoneValidate(phone);
+        if(emailValidateResult){
+            return emailValidateResult;
+        } else if(phoneValidateResult){
+            return phoneValidateResult;
         }
         return null;
     },
-    emailRegEx(email){
-        let regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/
-        return regex.test(email)
-    },
-    phoneRegEx(phone){
-        let regex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
-        return regex.test(phone) 
-    },
+
 }
