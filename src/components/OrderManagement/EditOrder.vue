@@ -42,7 +42,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" @change="updateItemTotal(itemIndex)" v-model="item.quantity">
+                                    <input type="text" v-model="item.quantity">
                                 </td>
                                 <td>
                                     <select v-if="products[findProductbyName(item.name)]" v-model="item.size" @change="updateItemSize(itemIndex)" class="browser-default">
@@ -134,7 +134,7 @@ export default {
             }
         },
         updateOrder(){
-            this.feedback = validate.orderValidate(this.order.name,this.order.phone,this.order.email,this.order.items.length)
+            this.feedback = validate.orderValidate(this.order.name,this.order.phone,this.order.email,this.order.items.length,this.order.items)
             if(!this.feedback){
                 this.loading = true;
                 if(confirm('Are you sure you want to edit the order?')){
