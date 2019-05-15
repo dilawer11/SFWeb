@@ -88,7 +88,8 @@ export default {
         this.product.name,
         this.product.category,
         this.product.description,
-        this.product.sizes.length
+        this.product.sizes.length,
+        this.product.sizes
       );
       if (!this.feedback) {
         this.loading = true;

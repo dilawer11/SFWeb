@@ -1,3 +1,5 @@
+import { isNull } from "util";
+
 export default {
     emailValidate(email){
         let regex = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/
@@ -25,7 +27,7 @@ export default {
         }
         return null 
     },
-    productValidate(name,category, description,sizesLength){
+    productValidate(name,category, description,sizesLength,sizes){
         //Presence checks
         if(!name){
             return 'Please enter a name'
@@ -35,7 +37,7 @@ export default {
             return 'Please enter a category'
         } else if (!sizesLength){
             return 'Please enter atleast one size'
-        }
+        } 
         //Length checks
         if(name.length>100){
             return 'Name cannot exceed 100 characters'
@@ -46,7 +48,16 @@ export default {
         } else if(sizesLength>50){
             return 'Maximum length of sizes can be 50'
         }
-        return null
+        //Sizes Check
+        let retVal = null;
+        sizes.forEach(sizeItem => { 
+            if(sizeItem.size.length<1){
+                retVal = 'Please enter a size'
+            } else if(sizeItem.price<=0){
+                retVal = 'Please enter a price greater than 0'
+            }
+        })
+        return retVal
     },
     orderItemValidate(orderItems){
         let sum = 0
@@ -76,6 +87,8 @@ export default {
         //Sanity Checks
         if(isNaN(price)){
             return 'Price must be a number'
+        } else if(price<=0){
+            return 'Price must be greater than 0'
         }
 
         //Length Checks

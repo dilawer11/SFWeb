@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     addProduct() {
-      this.feedback = validate.productValidate(this.name,this.category,this.description,this.sizes.length)
+      this.feedback = validate.productValidate(this.name,this.category,this.description,this.sizes.length,this.sizes)
       if (this.feedback == null) {
         this.loading = true;
         this.slug = slugify(this.name, {
