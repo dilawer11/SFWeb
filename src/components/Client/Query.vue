@@ -16,7 +16,6 @@
                             <h1>Query Form</h1>
                         </div>
                     </div>
-                    <p v-if="feedback" class="red-text center-align">{{feedback}}</p>
                     <div class="row">
                         <div class="col-sm-6">
                             
@@ -46,7 +45,7 @@
                         <div class="col-sm-6">
                             <h2>Phone: </h2>
                             <div class="inputBox ">
-                                <input v-model=phone type="text" class="input" >
+                                <input laceholder="+00 0123456789" v-model=phone type="text" class="input" >
                             </div>
                         </div>
                     </div>
@@ -59,6 +58,7 @@
                             </div>
                         </div>
                     </div>
+                    <p v-if="feedback" style="color:rgba(151, 26, 26, 0.5);">{{feedback}}</p>
 
                     <div class="row">
 

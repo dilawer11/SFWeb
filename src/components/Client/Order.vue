@@ -110,6 +110,7 @@
                                     <th>Size</th>
                                     <th>Price</th>
                                     <th>Total</th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
@@ -117,11 +118,12 @@
 
                                 <tr v-for="(item, index) in this.Cart" :key="index">
                                 
-                                    <th>{{item.name}}</th>
-                                    <th>{{item.quantity}}</th>
-                                    <th>{{item.sizes.size}}</th>
-                                    <th>{{item.sizes.price}}</th>
-                                    <th>{{item.total.toString()}}</th>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.quantity}}</td>
+                                    <td>{{item.sizes.size}}</td>
+                                    <td>{{item.sizes.price}}</td>
+                                    <td>{{item.total.toString()}}</td>
+                                    <td><span @click="deleteItem(item)" class="glyphicon glyphicon-trash"></span></td>
 
                                 </tr>
 
@@ -135,6 +137,7 @@
                                     <th> </th>
                                     <th> </th>
                                     <th>{{OrderTotal}}</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
 
@@ -293,6 +296,9 @@ export default {
                     this.$router.push({name:'Order'})
                 })
             }
+        },
+        deleteItem(item){
+            this.Cart = this.Cart.filter(cartItem => item!=cartItem)
         },
 
     },
