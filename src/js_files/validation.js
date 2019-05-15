@@ -26,11 +26,19 @@ export default {
         }
         return null 
     },
+    nameValidate(name){
+    	if(!name){
+    	    return 'Please enter a name'
+   	} else if(name.length<3){
+	    return 'Name must be atleast 3 characters'
+	} else if(name.length>30){
+	    return 'Name can be maximum 30 chracters'
+	} 
+	return null;
+    },
     productValidate(name,category, description,sizesLength,sizes,products){
         //Presence checks
-        if(!name){
-            return 'Please enter a name'
-        } else if(!description){
+        if(!description){
             return 'Please enter a description'
         } else if(!category){
             return 'Please enter a category'
@@ -38,16 +46,18 @@ export default {
             return 'Please enter atleast one size'
         } 
         //Length checks
-        if(name.length>50){
-            return 'Name cannot exceed 50 characters'
-        } else if(category.length>50){
-            return 'Category cannnot exceed 50 characters'
+        if(category.length>30){
+            return 'Category cannnot exceed 30 characters'
         } else if(description.length>300){
             return 'Description cannot exceed 300 characters'
-        } else if(sizesLength > 25){
-            return 'Maximum length of sizes can be 25'
+        } else if(sizesLength > 20){
+            return 'Maximum length of sizes can be 20'
         }
-        let existingMatchResult = this.existingProductMatch(products,name);
+        let nameValidateResult = this.nameValidate(name);
+	if(nameValidateResult){
+	    return nameValidateResult;
+	}
+	let existingMatchResult = this.existingProductMatch(products,name);
         if(existingMatchResult){
             return existingMatchResult;
         }
@@ -113,8 +123,8 @@ export default {
         }
 
         //Length Checks
-        if(size.length>50){
-            return 'Size length cannot exceed 50 characters'
+        if(size.length>30){
+            return 'Size length cannot exceed 30 characters'
         } else if(price>100000){
             return 'Price cannot be greater than 100000'
         }
@@ -122,57 +132,48 @@ export default {
     },
     orderValidate(name,phone,email,orderItemsLength,orderItems){
         //Presence Checks
-        if(!name){
-            return 'Please enter a name'
-        } else if(!orderItemsLength){
+        if(!orderItemsLength){
             return 'Please atleast add 1 item to the order'
         }
-
         //Length checks
-        if(name.length > 50){
-            return 'Name length cannot exceed 50 characters'
-        }  else if(this.orderItemsLength>15){
+        if(this.orderItemsLength>15){
             return 'You can order a maximum of 15 items'
         }
         //Sanity checks
-        let emailValidateResult = null;
-        let phoneValidateResult = null;
-        emailValidateResult = this.emailValidate(email);
-        phoneValidateResult = this.phoneValidate(phone);
+        let nameValidateResult = this.nameValidate(name);
+	let emailValidateResult = this.emailValidate(email);
+        let phoneValidateResult = this.phoneValidate(phone);
         if(emailValidateResult){
             return emailValidateResult
         } else if(phoneValidateResult){
             return phoneValidateResult;
-        }
+        } else if(nameValidateResult){
+	    return nameValidateResult
+	}
         return this.orderItemValidate(orderItems)
     },
     queryValidate(name,email,phone,message){
         //Presence checks
-        if(!name){
-            return 'Please enter a name'
-        } else if(!phone && !email){
-            return 'Please enter a phone number or an Email address'
-        } else if(!message){
+        if(!message){
             return 'Please enter a message'
         }
 
         //Length Checks
-        if(name.length > 50){
-            return 'Name length cannot exceed 50 characters'
-        } else if(message.length > 500 || message.length < 10){
+        if(message.length > 500 || message.length < 10){
             return 'Message should be between 10-500 characters'
         }
 
         //Sanity Checks
-        let emailValidateResult = null;
-        let phoneValidateResult = null;
-        emailValidateResult = this.emailValidate(email);
-        phoneValidateResult = this.phoneValidate(phone);
+        let nameValidateResult = this.nameValidate(name);
+	let emailValidateResult = this.emailValidate(email);
+        let phoneValidateResult = this.phoneValidate(phone);
         if(emailValidateResult){
             return emailValidateResult;
         } else if(phoneValidateResult){
             return phoneValidateResult;
-        }
+        } else if (nameValidateResult){
+	    return nameValidateResult;
+	}
         return null;
     },
 
