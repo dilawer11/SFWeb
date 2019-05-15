@@ -54,10 +54,10 @@ export default {
             return 'Maximum length of sizes can be 20'
         }
         let nameValidateResult = this.nameValidate(name);
-	if(nameValidateResult){
-	    return nameValidateResult;
-	}
-	let existingMatchResult = this.existingProductMatch(products,name);
+        if(nameValidateResult){
+            return nameValidateResult;
+        }
+	    let existingMatchResult = this.existingProductMatch(products,name);
         if(existingMatchResult){
             return existingMatchResult;
         }
