@@ -6,11 +6,10 @@
     <h2 class="center-align black-text">Products</h2>
     <p class="red-text center-align" v-if="feedback">{{feedback}}</p>
     <div class="product-index container">
-      <div class="card" v-for="product in products" :key="product.id">
+      <div class="card hoverable grey" v-for="product in products" :key="product.id">
         <div class="card-content">
-          <i class="material-icons delete" @click="deleteProduct(product.id)">delete</i>
-          <h2 class="indigo-text">{{product.name}}</h2>
-          <h6 class="blue-text">{{product.category}}</h6>
+          <h2 class="white-text">{{product.name}}</h2>
+          <h6 class="white-text">{{product.category}}</h6>
           <ul class="sizes">
             <li v-for="(item,index) in product.sizes" :key="index">
               <span class="chip">{{item.size}} {{item.price}}</span>
@@ -21,6 +20,9 @@
           <router-link :to="{name: 'EditProduct',params:{product_slug: product.slug}}">
             <i class="material-icons edit">edit</i>
           </router-link>
+        </span>
+        <span class="btn-floating btn-large waves-effect waves-light red left halfway-fab">
+          <i class="material-icons" @click="deleteProduct(product.id)">delete</i>
         </span>
       </div>
       <span class="hoverable pulse btn-floating btn-large halfway-fab red darken-2 add-product">
