@@ -305,15 +305,7 @@ export default {
     computed: {
         OrderTotal()
         {
-            var t=0;
-            var i=0
-            for(i=0; i<this.Cart.length;  i=i+1)
-            {
-                t+=this.Cart[i].total
-
-            }
-            return t.toString();
-            
+            return this.Cart.reduce((num,item)=>item.total+num,0).toString();            
         },
         Total()
         {
