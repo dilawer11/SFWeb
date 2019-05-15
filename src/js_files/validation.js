@@ -52,8 +52,10 @@ export default {
         let sum = 0
         let retVal = null
         orderItems.forEach(item => {
-            if(isNaN(item.quantity) && item.quantity<=0){
+            if(isNaN(item.quantity)){
                 retVal =  'Quantity must be a number and greater than zero'
+            }else if(item.quantity<=0){
+                retVal = "Quantity should be greater than zero"
             } else if (item.quantity > 100000){
                 retVal = 'Max Quantity allowed is 100000. If you want to order more please contact us directly'
             }

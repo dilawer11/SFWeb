@@ -40,7 +40,7 @@
                         <div class="col-sm-6">
                             <h3>Phone: </h3>
                             <div class="inputBox ">
-                                <input placeholder="+00-0123456789" v-model=Phone type="text" class="input">
+                                <input placeholder="+00 0123456789" v-model=Phone type="text" class="input">
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                     <th>{{item.quantity}}</th>
                                     <th>{{item.sizes.size}}</th>
                                     <th>{{item.sizes.price}}</th>
-                                    <th>{{item.total}}</th>
+                                    <th>{{item.total.toString()}}</th>
 
                                 </tr>
 
@@ -306,7 +306,7 @@ export default {
                 t+=this.Cart[i].total
 
             }
-            return t;
+            return t.toString();
             
         },
         Total()
