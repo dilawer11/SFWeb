@@ -135,9 +135,9 @@ export default {
         },
         updateOrder(){
             this.feedback = validate.orderValidate(this.order.name,this.order.phone,this.order.email,this.order.items.length,this.order.items)
-            if(!this.feedback){
-                this.loading = true;
+	    if(!this.feedback){
                 if(confirm('Are you sure you want to edit the order?')){
+                    this.loading = true;
                     db.collection('orders').doc(this.order.id).update(this.order).then(()=>{
                         alert('Order Updated Successfully')
                         this.loading=false;
@@ -148,7 +148,8 @@ export default {
                         this.handleErr(err);       
                     })
                 }            
-            }            
+            }
+		           
         },
         goToView(){
             if(confirm('Are you sure you want to leave this page? Any unsaved changes will be lost')){

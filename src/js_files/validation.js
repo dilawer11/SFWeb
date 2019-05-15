@@ -6,15 +6,14 @@ export default {
         if(!email){
             return 'Please enter an email'
         }
-        else if(email.length>100){
-            return 'Email length cannot exceed 100 characters'            
+        else if(email.length>50){
+            return 'Email length cannot exceed 50 characters'            
         } else if(!regex.test(email)){
             return 'Please enter a valid email'
         }
         return null;
     },
     phoneValidate(phone){
-        //let regex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
         let regex = /^\+(?:[0-9] ?){6,14}[0-9]$/
         if(!phone){
             return 'Please enter a phone number'
@@ -39,14 +38,14 @@ export default {
             return 'Please enter atleast one size'
         } 
         //Length checks
-        if(name.length>100){
-            return 'Name cannot exceed 100 characters'
-        } else if(category.length>100){
-            return 'Category cannnot exceed 100 characters'
+        if(name.length>50){
+            return 'Name cannot exceed 50 characters'
+        } else if(category.length>50){
+            return 'Category cannnot exceed 50 characters'
         } else if(description.length>300){
             return 'Description cannot exceed 300 characters'
-        } else if(sizesLength>50){
-            return 'Maximum length of sizes can be 50'
+        } else if(sizesLength > 25){
+            return 'Maximum length of sizes can be 25'
         }
         let existingMatchResult = this.existingProductMatch(products,name);
         if(existingMatchResult){
@@ -76,8 +75,16 @@ export default {
     orderItemValidate(orderItems){
         let sum = 0
         let retVal = null
-        orderItems.forEach(item => {
-            if(isNaN(item.quantity)){
+        if(!orderItems){
+		return 'Please enter atleast one item'
+	}
+	orderItems.forEach(item => {
+	    if(item==null){
+	    	retVal = 'Please Enter an Item'
+	    } else if(!item.size || item.size==undefined){
+	    	retVal = 'Please Enter a Size'
+	    }
+	    else if(isNaN(item.quantity)){
                 retVal =  'Quantity must be a number and greater than zero'
             }else if(item.quantity<=0){
                 retVal = "Quantity should be greater than zero"
@@ -107,7 +114,7 @@ export default {
 
         //Length Checks
         if(size.length>50){
-            return 'Size length cannot exceed 100 characters'
+            return 'Size length cannot exceed 50 characters'
         } else if(price>100000){
             return 'Price cannot be greater than 100000'
         }
@@ -122,8 +129,8 @@ export default {
         }
 
         //Length checks
-        if(name.length>100){
-            return 'Name length cannot exceed 100 characters'
+        if(name.length > 50){
+            return 'Name length cannot exceed 50 characters'
         }  else if(this.orderItemsLength>15){
             return 'You can order a maximum of 15 items'
         }
@@ -150,8 +157,8 @@ export default {
         }
 
         //Length Checks
-        if(name.length>100){
-            return 'Name length cannot exceed 100 characters'
+        if(name.length > 50){
+            return 'Name length cannot exceed 50 characters'
         } else if(message.length > 500 || message.length < 10){
             return 'Message should be between 10-500 characters'
         }
