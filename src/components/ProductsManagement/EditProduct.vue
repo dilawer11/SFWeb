@@ -63,7 +63,8 @@ export default {
       anotherPrice: null,
       anotherSize: null,
       feedback: null,
-      loading: false
+      loading: false,
+      products: [],
     };
   },
   methods: {
@@ -89,7 +90,8 @@ export default {
         this.product.category,
         this.product.description,
         this.product.sizes.length,
-        this.product.sizes
+        this.product.sizes,
+        this.products,
       );
       if (!this.feedback) {
         this.loading = true;
@@ -123,27 +125,48 @@ export default {
   },
   created() {
     this.loading = true;
-    let ref = db
-      .collection("products")
-      .where("slug", "==", this.$route.params.product_slug);
-    ref
-      .get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          alert("Cannot find the product in the database");
-          this.$router.push({ name: "ProductsIndex" });
-        } else {
-          snapshot.forEach(doc => {
-            this.product = doc.data();
-            this.product.id = doc.id;
-          });
-        }
-        this.loading = false;
-      })
-      .catch(err => {
-        console.log(err);
-        this.loading = false;
-      });
+    // let ref = db
+    //   .collection("products")
+    //   .where("slug", "==", this.$route.params.product_slug);
+    // ref
+    //   .get()
+    //   .then(snapshot => {
+    //     if (snapshot.empty) {
+    //       alert("Cannot find the product in the database");
+    //       this.$router.push({ name: "ProductsIndex" });
+    //     } else {
+    //       snapshot.forEach(doc => {
+    //         this.product = doc.data();
+    //         this.product.id = doc.id;
+    //       });
+    //     }
+    //     this.loading = false;
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.loading = false;
+    //   });
+    db.collection("products").get().then((snapshot)=>{
+      if(snapshot.empty){
+        alert("Cannot find the product in the database");
+        this.$router.push({name:"ProductsIndex"});
+      } else{
+        snapshot.forEach(doc=>{
+          let temp = doc.data();
+          temp.id = doc.id;
+          this.products.push(temp)
+          if(temp.slug==this.$route.params.product_slug){
+            this.product=doc.data();
+            this.product.id=doc.id;
+          }
+        })
+      }
+    }).catch(err=>{
+      console.log(err);
+      this.loading=false;
+      alert("Couldn't load data from Database")
+      this.$router.push({name:"ProductsIndex"})
+    })
   }
 };
 </script>

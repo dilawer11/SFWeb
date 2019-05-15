@@ -27,7 +27,7 @@ export default {
         }
         return null 
     },
-    productValidate(name,category, description,sizesLength,sizes){
+    productValidate(name,category, description,sizesLength,sizes,products){
         //Presence checks
         if(!name){
             return 'Please enter a name'
@@ -48,6 +48,11 @@ export default {
         } else if(sizesLength>50){
             return 'Maximum length of sizes can be 50'
         }
+        let existingMatchResult = this.existingProductMatch(products,name);
+        if(existingMatchResult){
+            return existingMatchResult;
+        }
+
         //Sizes Check
         let retVal = null;
         sizes.forEach(sizeItem => { 
@@ -58,6 +63,15 @@ export default {
             }
         })
         return retVal
+    },
+    existingProductMatch(products,_productName){
+        let retVal = null;
+        products.forEach(product=>{
+            if(product.name==_productName){
+                retVal = 'Product Name Already Exists'
+            }
+        })
+        return retVal;
     },
     orderItemValidate(orderItems){
         let sum = 0

@@ -64,6 +64,7 @@ import db from "@/firebase/init";
 import slugify from "slugify";
 import validate from '@/js_files/validation.js'
 import parser from '@/js_files/parsing.js'
+import { loadavg } from 'os';
 
 export default {
   name: "AddProduct",
@@ -77,12 +78,13 @@ export default {
       anotherPrice: null,
       feedback: null,
       slug: null,
-      loading: false
+      loading: false,
+      products: [],
     };
   },
   methods: {
     addProduct() {
-      this.feedback = validate.productValidate(this.name,this.category,this.description,this.sizes.length,this.sizes)
+      this.feedback = validate.productValidate(this.name,this.category,this.description,this.sizes.length,this.sizes,this.products)
       if (this.feedback == null) {
         this.loading = true;
         this.slug = slugify(this.name, {
@@ -127,6 +129,20 @@ export default {
     deleteSize(size) {
       this.sizes = this.sizes.filter(element => element != size);
     }
+  },
+  created(){
+    this.loading = true;
+    db.collection('products').get().then((snapshot)=>{
+          snapshot.forEach(doc => {
+            let temp = doc.data();
+            temp.id = doc.id;
+            this.products.push(temp);
+          })
+        this.loading = false;
+    }).catch(err=>{
+      console.log(err);
+      this.$router.push({name : "ProductsIndex"})
+    })
   }
 };
 </script>
