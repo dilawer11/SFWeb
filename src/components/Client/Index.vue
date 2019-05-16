@@ -106,17 +106,17 @@
           <!--testimonial 1-->
           <div class="testimonial">
             <div class="content">
-              <p>The message from CEO will go here</p>
+              <p>I am highly satisfied with each and every one of their products. I have had the priviledge of working with them for 9 years and they never disappoint</p>
               <h6 class="name-job">
-                <span class="name">Arshad Kamal</span>
-                <span class="job">CEO</span>
+                <span class="name">Muhammad Naeem</span>
+                <span class="job">Surgical Devices Distributer</span>
               </h6>
             </div>
           </div>
           <!--testimonial 2-->
           <div class="testimonial">
             <div class="content">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus molestie, justo nec convallis sollicitudin, sapien lorem dictum lacus, non consequat odio ipsum nec est. Sed mattis egestas elementum. Nulla facilisi. Quisque placerat risus ac nunc ornare tincidunt.</p>
+              <p>We are highly motivated to serve our customer's needs. We have been an industry standard for over 25 years now. We hope to keep serving our great nation and it's people</p>
               <h6 class="name-job">
                 <span class="name">Rutab Ahmed</span>
                 <span class="job">Director</span>
