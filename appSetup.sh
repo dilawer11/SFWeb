@@ -9,5 +9,6 @@ else
 	echo "Infering you have npm and nodejs installed and running the later commands"
 fi
 git clone https://github.com/dilawer11/SFWeb.git
+cd SFWeb
 npm install
 npm run serve
