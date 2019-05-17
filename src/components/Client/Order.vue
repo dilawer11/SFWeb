@@ -268,7 +268,7 @@ export default {
                         num : orderNumber+1,
                     })
                     this.loading=false;
-                    alert('Order Sucessfully Placed')
+                    alert('Order Sucessfully Placed\nYOUR ORDER NO IS :'+ orderNumber)
                     this.$router.push({name:'Order'})
                 }).catch(err=>{
                     this.loading=false;
