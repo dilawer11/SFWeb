@@ -129,7 +129,6 @@ export default {
         },
         changeStatus(){
             if(this.selectedStatus!=this.order.status){
-                this.loading=true;
                 this.order.status=this.selectedStatus;
             }
         },
