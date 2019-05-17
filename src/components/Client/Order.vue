@@ -278,7 +278,16 @@ export default {
             }
         },
         getPriceQuote(){
-            this.feedback = validate.orderValidate(this.FirstName+this,LastName,this.Phone,this.Email,items.length,items);
+            var items = []
+                this.Cart.forEach(item=>{
+                items.push({
+                    name:item.name,
+                    quantity: parseInt(item.quantity,10),
+                    size:item.sizes.size,
+                    price:item.sizes.price
+                })
+            })
+            this.feedback = validate.orderValidate(this.FirstName+this.LastName,this.Phone,this.Email,items.length,items);
             if(!this.feedback){
                 this.feedback = null;
                 let emailBody = 'Name : ' + this.FirstName + ' ' + this.LastName + '\n\n' + 'Email: ' + this.Email + '   Phone: ' + this.Phone + '\n\n'
