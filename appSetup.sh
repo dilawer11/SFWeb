@@ -10,5 +10,10 @@ else
 fi
 git clone https://github.com/dilawer11/SFWeb.git
 cd SFWeb
-npm install
-npm run serve
+if [ "$2" != ""]; then
+	cp $2/* src/ 
+	npm install 
+	npm run serve
+else
+	echo "Please Copy Paste The firebase folder from src/firebase in  USB to SFWeb/src"
+fi
